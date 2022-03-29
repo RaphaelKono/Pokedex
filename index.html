@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kono Pokedex</title>
+
+    <script>
+        let currentPokemon;
+        async function loadPokemon() {
+            let url = 'https://pokeapi.co/api/v2/pokemon/159';
+            let response = await fetch(url);
+            currentPokemon = await response.json();
+            console.log('Loaded Pokemon', currentPokemon);
+            renderPokemonInfo();
+        }
+
+        function renderPokemonInfo() {
+            let pokemonCard = document.getElementById('pokemonName');
+            pokemonCard.innerHTML = '';
+            console.log(currentPokemon.sprites.other['official-artwork'].front_default);
+            pokemonCard.innerHTML = `<img src=${currentPokemon.sprites.other['official-artwork'].front_default}>`;
+            pokemonCard.innerHTML += normalizeID(currentPokemon.id);
+            pokemonCard.innerHTML += capitalizeFirstLetter(currentPokemon.name);
+        }
+
+        function capitalizeFirstLetter(string) {
+            return string.charAt(0).toUpperCase() + string.slice(1);
+        }
+
+        function normalizeID(id) {
+            return ('#00' + id).slice(-3);
+        }
+    </script>
+
+    <style>
+        body {
+            margin: 0;
+        }
+        
+        h1 {
+            margin: 0;
+        }
+        
+        #pokedex {
+            min-height: 50vh;
+            background-color: rgb(253, 145, 119);
+            color: white;
+        }
+    </style>
+</head>
+
+<body onload="loadPokemon()">
+    <div id="pokedex">
+        <div id="pokemonName">
+        </div>
+    </div>
+</body>
+
+</html>
