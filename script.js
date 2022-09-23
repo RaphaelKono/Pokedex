@@ -39,18 +39,27 @@ function isNumber(n) {
 async function searchPokemon() {
     loadedPokemon = 12;
     isLoading = true;
-    document.getElementById('loadButton').classList.add('d-none');
-    document.getElementById('pokemonList').innerHTML = '';
+    resetForSearch();
     let search = document.getElementById('search').value;
     search = capitalizeFirstLetter(search);
-    if (!isNumber(search)) {
-        search = allPokemonNames.indexOf(search) + 1;
-    }
+    search = convertToID(search);
     await loadPokemonAPI(search);
     pushIntoArray(search);
     document.getElementById('pokemonList').innerHTML += templatePokemonInfo(search);
     renderPokemonType(search, 'pokemonType');
     closeDetails();
+}
+
+function resetForSearch() {
+    document.getElementById('loadButton').classList.add('d-none');
+    document.getElementById('pokemonList').innerHTML = '';
+}
+
+function convertToID(search) {
+    if (!isNumber(search)) {
+        search = allPokemonNames.indexOf(search) + 1;
+    }
+    return search;
 }
 
 
@@ -149,13 +158,8 @@ function capitalizeFirstLetter(string) {
 
 
 function normalizeID(id) {
-    if (id < 100) {
-        if (id < 10) {
-            id = '00' + id;
-        } else {
-            id = '0' + id;
-        }
-    }
+    id = '000' + id;
+    id = id.substring(id.length - 3, id.length);
     return id;
 }
 

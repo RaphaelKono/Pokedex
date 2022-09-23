@@ -39,57 +39,96 @@ function templateEvolution2Info(x, y, info1) {
     `
 }
 
-function certainLocation(element) {
-    return element[16][1].name == 'take-damage';
+function renderLocationEvo(htmlElement, englishName) {
+    let param1 = '',
+        param2;
+    param2 = 'Bei der Steinskulptur im Sandturmkessel (Naturzone in der Galar-Region) mit mind. 49 KP Schaden (durch Gegner verursacht)';
+    htmlElement.innerHTML += templateEvolution2Info(param1, param2, englishName);
 }
 
-function criticalHits(element) {
-    return element[16][1].name == 'three-critical-hits';
+function renderCriticalHitsEvo(htmlElement, englishName) {
+    let param1 = '',
+        param2;
+    param2 = 'Drei Volltreffer in einem Kampf';
+    htmlElement.innerHTML += templateEvolution2Info(param1, param2, englishName);
 }
 
-function towerOfDarkness(element) {
-    return element[16][1].name == 'tower-of-darkness';
+function renderTowerofWatersEvo(htmlElement) {
+    let param1 = '',
+        param2;
+    param2 = 'Training im Turm des Wassers';
+    htmlElement.innerHTML += templateEvolution2Info(param1, param2, 'urshifu1');
+    document.getElementById('evourshifu1').innerHTML += '<img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10191.png" class="card-img-top">';
 }
 
-function towerOfWaters(element) {
-    return element[16][1].name == 'tower-of-waters';
+function renderTowerofDarknessEvo(htmlElement) {
+    let param1 = '',
+        param2;
+    param2 = 'Training im Turm des Unlichts';
+    htmlElement.innerHTML += templateEvolution2Info(param1, param2, 'urshifu');
 }
 
-function spin(element) {
-    return element[16][1].name == 'spin';
+function renderSpinEvo(htmlElement) {
+    let param1 = '',
+        param2;
+    param2 = 'Zuckeritem und Kontrollstick drehen';
+    htmlElement.innerHTML += templateEvolution2Info(param1, param2, 'alcremie');
 }
 
-function shed(element) {
-    return element[16][1].name == 'shed';
+function renderShedEvo(htmlElement, englishName) {
+    let param1 = '',
+        param2;
+    param2 = 'Platz im Team und ein Pokeball';
+    htmlElement.innerHTML += templateEvolution2Info(param1, param2, englishName);
 }
 
-function trade(element) {
-    return element[16][1].name == 'trade';
+async function renderTradeEvo(evoDetailArr, htmlElement, englishName) {
+    let param1 = await heldItem(evoDetailArr);
+    let param2 = `Tausch`;
+    htmlElement.innerHTML += templateEvolution2Info(param1, param2, englishName);
 }
 
-function itemTrigger(element) {
-    return element[2][1] && element[16][1].name == 'use-item';
+async function renderTriggerItemEvo(evoDetailArr, htmlElement, englishName) {
+    let currentItem = await loadItemAPI(evoDetailArr[2][1].url);
+    let param1 = `<img src=${currentItem.sprites.default}>`;
+    let param2 = '';
+    htmlElement.innerHTML += templateEvolution2Info(param1, param2, englishName);
 }
 
-function certainFriendship(element) {
-    return element[8][1] && element[16][1].name == 'level-up';
+function renderFriendshipEvo(evoDetailArr, htmlElement, englishName) {
+    let param2 = isDayOrNight(evoDetailArr);
+    let param1 = '<img src="img/rare-candy.png">' + `<div class="d-flex"><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/soothe-bell.png"><h6> > ${evoDetailArr[8][1]}</h6></div>`;
+    htmlElement.innerHTML += templateEvolution2Info(param1, param2, englishName);
 }
 
-function simpleLvlUp(element) {
-    return element[9][1] && element[16][1].name == 'level-up';
+async function renderHoldItemEvo(evoDetailArr, htmlElement, englishName) {
+    let param1 = await heldItem(evoDetailArr);
+    let param2 = isDayOrNight(evoDetailArr);
+    htmlElement.innerHTML += templateEvolution2Info(param1, param2, englishName);
 }
 
-function knownMove(element) {
-    return element[16][1].name == 'level-up' && element[3][1] != null;
+async function renderknownMoveEvo(evoDetailArr, htmlElement, englishName) {
+    let moveName = await loadMove(evoDetailArr[3][1].name);
+    moveName = nameDecision(moveName);
+    let param1 = '<img src="img/rare-candy.png">'
+    let param2 = 'Kennt ' + moveName;
+    htmlElement.innerHTML += templateEvolution2Info(param1, param2, englishName);
 }
 
-function itemIsHold(element) {
-    return element[16][1].name == 'level-up' && element[1][1] != null;
+async function renderPartyMemberEvo(evoDetailArr, htmlElement, englishName) {
+    let partyMemb = await loadPokemonAPI(evoDetailArr[11][1].name);
+    let param1 = '<img src="img/rare-candy.png">';
+    let param2 = `<img src="${partyMemb.sprites.front_default}">`;
+    htmlElement.innerHTML += templateEvolution2Info(param1, param2, englishName);
 }
 
-function partyMember(element) {
-    return element[16][1].name == 'level-up' && element[11][1] != null;
+function renderSimpleLvlUpEvo(evoDetailArr, htmlElement, englishName) {
+    let param1 = '<img src="img/rare-candy.png">';
+    let param2 = 'Lvl. ' + evoDetailArr[9][1];
+    htmlElement.innerHTML += templateEvolution2Info(param1, param2, englishName);
 }
+
+
 
 function isDayOrNight(newarr) {
     if (newarr[14][1] == 'day') {

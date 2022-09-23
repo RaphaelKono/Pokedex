@@ -62,13 +62,6 @@ async function loadPokemonTypes(x) {
     }
 }
 
-function renderType(j, germanType) {
-    if (allPokemon[x - 1].types.length == 1) {
-        document.getElementById(`poketype${2}ID`).innerHTML = ''; //if you render a dual-typed pokemon prone to a single-typed pokemon the 2nd type of the prone pokemon would be displayed
-    }
-    document.getElementById(`poketype${j+1}ID`).innerHTML = germanType.names[4].name; //j+1 since for-loop starts with j=0 and poketypejID actually starts with 1
-    document.getElementById(`poketype${j+1}ID`).classList.add(currentPokemon.types[j].type.name);
-}
 
 function loadDMG(DMGtype, DMGarr) {
     for (let k = 0; k < DMGtype.length; k++) {
@@ -77,24 +70,80 @@ function loadDMG(DMGtype, DMGarr) {
     }
 }
 
-function renderBaseStats(x) {
-    document.getElementById('base-statsID').classList.remove('d-none');
-    document.getElementById('pokeStats').innerHTML = `<p class="${adaptTypeCss(x)}" onclick="renderBaseStats(${x})">Basiswerte</p>`;
-    document.getElementById('infoID').classList.add('d-none');
-    document.getElementById('pokeInfo').innerHTML = `<p onclick="renderInfo(${x})">Info</p>`;
-    document.getElementById('evolutionID').classList.add('d-none');
-    document.getElementById('pokeEvos').innerHTML = `<p onclick="loadEvolution(${x})">Evolution</p>`;
-    renderStats('pokeHPid', 1, 255, x, 0);
-    renderStats('pokeATTid', 5, 199, x, 1);
-    renderStats('pokeDEFid', 5, 230, x, 2);
-    renderStats('pokeSPECATTid', 10, 194, x, 3);
-    renderStats('pokeSPECDEFid', 20, 250, x, 4);
-    renderStats('pokeINITid', 5, 200, x, 5);
+function renderTopCardDetails(x) {
+    let pokename = document.getElementById(`pokeNameID`);
+    let germanName = allPokemonNames[x - 1];
+    pokename.innerHTML = germanName;
+    document.getElementById('pokeGenusID').innerHTML = allSpecies[x - 1].genera[4].genus;
+    document.getElementById('pokemonID').innerHTML = '#' + normalizeID(x);
+    document.getElementById('pokemonSpritesID').innerHTML = `<img src="${allPokemon[x-1].sprites.other['official-artwork'].front_default}" class="card-img-top">`;
+    let precursor = 'pokemonDetailType';
+    renderPokemonType(x, precursor);
+    adaptTypeCss(x);
+    document.getElementById('pokemonDetailsDiv').classList.add(thisPokeType);
+    document.getElementById('pokemonSpritesID').classList.add(thisPokeType);
+    addArrows(x);
 }
 
-function renderStats(elementId, min, max, x, stat) {
-    document.getElementById(elementId).innerHTML = `
-    <div class="progress-bar ${adaptTypeCss(x)}" role="progressbar" aria-valuenow="${allPokemon[x - 1].stats[stat].base_stat / max * 100}" aria-valueMin="${min / max}" style="width: ${allPokemon[x-1].stats[stat].base_stat/max * 100}%" aria-valuemax="100"></div>`;
+function adaptTypeCss(x) {
+    thisPokeType = allPokemon[x - 1].types[0].type.name;
+    if (thisPokeType == 'flying' || thisPokeType == 'dragon' || thisPokeType == 'ground') {
+        thisPokeType = `${thisPokeType}2`
+    }
+    return thisPokeType;
+}
+
+function addArrows(x) {
+    if (x > 1) {
+        document.getElementById('priorPokemon').innerHTML = `<img onclick="initDetails(${x-1})" src="img/arrow-91-24.png" class="arrow">`;
+    } else if (x <= 1) {
+        document.getElementById('priorPokemon').innerHTML = `<img onclick="initDetails(${898})" src="img/arrow-91-24.png" class="arrow">`;
+    }
+    if (x < 898) {
+        document.getElementById('nextPokemonn').innerHTML = `<img onclick="initDetails(${x+1})" src="img/arrow-27-24.png" class="arrow">`;
+    } else if (x >= 898) {
+        document.getElementById('nextPokemonn').innerHTML = `<img onclick="initDetails(${1})" src="img/arrow-27-24.png" class="arrow">`;
+    }
+}
+
+
+function renderDescription(x) {
+    for (let i = 0; i < allSpecies[x - 1].flavor_text_entries.length; i++) {
+        const element = allSpecies[x - 1].flavor_text_entries[i];
+        if (element.language.name == 'de') {
+            document.getElementById('pokeDescrptnID').innerHTML = allSpecies[x - 1].flavor_text_entries[i].flavor_text;
+        };
+    }
+}
+
+function renderGenderRate(x) {
+    let pokeGender = document.getElementById('pokemonGenderID');
+    switch (allSpecies[x - 1].gender_rate) {
+        case -1:
+            pokeGender.innerHTML = '/';
+            break;
+        case 0:
+            pokeGender.innerHTML = 'Nur männlich ' + malesign;
+            break;
+        case 1:
+            pokeGender.innerHTML = 1 + femalesign + ' : ' + 7 + malesign;
+            break;
+        case 2:
+            pokeGender.innerHTML = 1 + femalesign + ' : ' + 3 + malesign;
+            break;
+        case 4:
+            pokeGender.innerHTML = 1 + femalesign + ' : ' + 1 + malesign;
+            break;
+        case 6:
+            pokeGender.innerHTML = 3 + femalesign + ' : ' + 1 + malesign;
+            break;
+        case 7:
+            pokeGender.innerHTML = 7 + femalesign + ' : ' + 1 + malesign;
+            break;
+        case 8:
+            pokeGender.innerHTML = 'Nur weiblich ' + femalesign;
+            break;
+    }
 }
 
 function calculateWeakness() {
@@ -156,82 +205,6 @@ function offsetWeaknesses(damage1, damage2, condition) {
     }
 }
 
-function renderTopCardDetails(x) {
-    let pokename = document.getElementById(`pokeNameID`);
-    let germanName = allPokemonNames[x - 1];
-    pokename.innerHTML = germanName;
-    document.getElementById('pokeGenusID').innerHTML = allSpecies[x - 1].genera[4].genus;
-    document.getElementById('pokemonID').innerHTML = '#' + normalizeID(x);
-    document.getElementById('pokemonSpritesID').innerHTML = `<img src="${allPokemon[x-1].sprites.other['official-artwork'].front_default}" class="card-img-top">`;
-    let precursor = 'pokemonDetailType';
-    renderPokemonType(x, precursor);
-    adaptTypeCss(x);
-    document.getElementById('pokemonDetailsDiv').classList.add(thisPokeType);
-    document.getElementById('pokemonSpritesID').classList.add(thisPokeType);
-    addArrows(x);
-}
-
-function adaptTypeCss(x) {
-    thisPokeType = allPokemon[x - 1].types[0].type.name;
-    if (thisPokeType == 'flying' || thisPokeType == 'dragon' || thisPokeType == 'ground') {
-        thisPokeType = `${thisPokeType}2`
-    }
-    return thisPokeType;
-}
-
-function addArrows(x) {
-    if (x > 1) {
-        document.getElementById('pronePokemon').innerHTML = `<img onclick="initDetails(${x-1})" src="img/arrow-91-24.png" class="arrow">`;
-    } else if (x <= 1) {
-        document.getElementById('pronePokemon').innerHTML = `<img onclick="initDetails(${898})" src="img/arrow-91-24.png" class="arrow">`;
-    }
-    if (x < 898) {
-        document.getElementById('nextPokemonn').innerHTML = `<img onclick="initDetails(${x+1})" src="img/arrow-27-24.png" class="arrow">`;
-    } else if (x >= 898) {
-        document.getElementById('nextPokemonn').innerHTML = `<img onclick="initDetails(${1})" src="img/arrow-27-24.png" class="arrow">`;
-    }
-}
-
-
-function renderDescription(x) {
-    for (let i = 0; i < allSpecies[x - 1].flavor_text_entries.length; i++) {
-        const element = allSpecies[x - 1].flavor_text_entries[i];
-        if (element.language.name == 'de') {
-            document.getElementById('pokeDescrptnID').innerHTML = allSpecies[x - 1].flavor_text_entries[i].flavor_text;
-        };
-    }
-}
-
-function renderGenderRate(x) {
-    let pokeGender = document.getElementById('pokemonGenderID');
-    switch (allSpecies[x - 1].gender_rate) {
-        case -1:
-            pokeGender.innerHTML = '/';
-            break;
-        case 0:
-            pokeGender.innerHTML = 'Nur männlich ' + malesign;
-            break;
-        case 1:
-            pokeGender.innerHTML = 1 + femalesign + ' : ' + 7 + malesign;
-            break;
-        case 2:
-            pokeGender.innerHTML = 1 + femalesign + ' : ' + 3 + malesign;
-            break;
-        case 4:
-            pokeGender.innerHTML = 1 + femalesign + ' : ' + 1 + malesign;
-            break;
-        case 6:
-            pokeGender.innerHTML = 3 + femalesign + ' : ' + 1 + malesign;
-            break;
-        case 7:
-            pokeGender.innerHTML = 7 + femalesign + ' : ' + 1 + malesign;
-            break;
-        case 8:
-            pokeGender.innerHTML = 'Nur weiblich ' + femalesign;
-            break;
-    }
-}
-
 async function loadAbilities(x) {
     for (let k = 0; k < allPokemon[x - 1].abilities.length; k++) {
         let currentAbility = await loadPokemonAbilityAPI(k, x);
@@ -263,6 +236,32 @@ function renderAbilityInfo(currentAbility, k, x) {
         };
     }
 }
+
+function renderBaseStats(x) {
+    adjustHtmlElementsForStats(x);
+    renderStats('pokeHPid', 1, 255, x, 0);
+    renderStats('pokeATTid', 5, 199, x, 1);
+    renderStats('pokeDEFid', 5, 230, x, 2);
+    renderStats('pokeSPECATTid', 10, 194, x, 3);
+    renderStats('pokeSPECDEFid', 20, 250, x, 4);
+    renderStats('pokeINITid', 5, 200, x, 5);
+}
+
+function adjustHtmlElementsForStats(x) {
+    document.getElementById('base-statsID').classList.remove('d-none');
+    document.getElementById('pokeStats').innerHTML = `<p class="${adaptTypeCss(x)}" onclick="renderBaseStats(${x})">Basiswerte</p>`;
+    document.getElementById('infoID').classList.add('d-none');
+    document.getElementById('pokeInfo').innerHTML = `<p onclick="renderInfo(${x})">Info</p>`;
+    document.getElementById('evolutionID').classList.add('d-none');
+    document.getElementById('pokeEvos').innerHTML = `<p onclick="loadEvolution(${x})">Evolution</p>`;
+}
+
+function renderStats(elementId, min, max, x, stat) {
+    document.getElementById(elementId).innerHTML = `
+    <div class="progress-bar ${adaptTypeCss(x)}" role="progressbar" aria-valuenow="${allPokemon[x - 1].stats[stat].base_stat / max * 100}" aria-valueMin="${min / max}" style="width: ${allPokemon[x-1].stats[stat].base_stat/max * 100}%" aria-valuemax="100"></div>`;
+}
+
+
 
 async function loadEvolutionChain(x) {
     await loadEvolutionAPI(x);
@@ -309,87 +308,78 @@ async function loadAnEvolution(currentEvolution) {
 }
 
 async function loadEvoDetails(evo_details, htmlElement, info1) {
-    info1 = info1.forms[0].name;
+    let englishName = adaptName(info1);
     if (evo_details.length > 0) {
         for (let j = 0; j < evo_details.length; j++) {
-            let param1 = '',
-                param2;
             const newarr = Object.entries(evo_details[j]);
-            await renderAndLoadEvoDetails(newarr, param1, param2, htmlElement, info1);
+            await renderAndLoadEvoDetails(newarr, htmlElement, englishName);
         }
     }
 }
 
-async function renderAndLoadEvoDetails(newarr, param1, param2, htmlElement, info1) {
+function adaptName(info1) {
+    info1 = info1.forms[0].name;
     if (info1 == 'darmanitan-standard') {
         info1 = 'darmanitan';
     }
-    switch (true) {
-        case certainLocation(newarr):
-            param2 = 'Bei der Steinskulptur im Sandturmkessel (Naturzone in der Galar-Region) mit mind. 49 KP Schaden (durch Gegner verursacht)';
-            htmlElement.innerHTML += templateEvolution2Info(param1, param2, info1);
-            break;
-        case criticalHits(newarr):
-            param2 = 'Drei Volltreffer in einem Kampf';
-            htmlElement.innerHTML += templateEvolution2Info(param1, param2, info1);
-            break;
-        case towerOfWaters(newarr):
-            param2 = 'Training im Turm des Wassers';
-            htmlElement.innerHTML += templateEvolution2Info(param1, param2, 'urshifu1');
-            document.getElementById('evourshifu1').innerHTML += '<img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10191.png" class="card-img-top">';
-            break;
-        case towerOfDarkness(newarr):
-            param2 = 'Training im Turm des Unlichts';
-            htmlElement.innerHTML += templateEvolution2Info(param1, param2, 'urshifu');
-            break;
-        case spin(newarr):
-            param2 = 'Zuckeritem und Kontrollstick drehen';
-            htmlElement.innerHTML += templateEvolution2Info(param1, param2, 'alcremie');
-            break;
-        case shed(newarr):
-            param2 = 'Platz im Team und ein Pokeball';
-            htmlElement.innerHTML += templateEvolution2Info(param1, param2, info1);
-            break;
-        case trade(newarr):
-            param1 = await heldItem(newarr);
-            param2 = `Tausch`;
-            htmlElement.innerHTML += templateEvolution2Info(param1, param2, info1);
-            break;
-        case itemTrigger(newarr):
-            let currentItem = await loadItemAPI(newarr[2][1].url);
-            param1 = `<img src=${currentItem.sprites.default}>`;
-            param2 = '';
-            htmlElement.innerHTML += templateEvolution2Info(param1, param2, info1);
-            break;
-        case certainFriendship(newarr):
-            param2 = isDayOrNight(newarr);
-            param1 = '<img src="img/rare-candy.png">' + `<div class="d-flex"><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/soothe-bell.png"><h6> > ${newarr[8][1]}</h6></div>`;
-            htmlElement.innerHTML += templateEvolution2Info(param1, param2, info1);
-            break;
-        case itemIsHold(newarr):
-            param1 = await heldItem(newarr);
-            param2 = isDayOrNight(newarr);
-            htmlElement.innerHTML += templateEvolution2Info(param1, param2, info1);
-            break;
-        case knownMove(newarr):
-            let moveName = await loadMove(newarr[3][1].name);
-            moveName = nameDecision(moveName);
-            param1 = '<img src="img/rare-candy.png">'
-            param2 = 'Kennt ' + moveName;
-            htmlElement.innerHTML += templateEvolution2Info(param1, param2, info1);
-            break;
-        case partyMember(newarr):
-            let partyMemb = await loadPokemonAPI(newarr[11][1].name);
-            param1 = '<img src="img/rare-candy.png">';
-            param2 = `<img src="${partyMemb.sprites.front_default}">`;
-            htmlElement.innerHTML += templateEvolution2Info(param1, param2, info1);
-            break;
-        case simpleLvlUp(newarr):
-            param1 = '<img src="img/rare-candy.png">'
-            param2 = 'Lvl. ' + newarr[9][1];
-            htmlElement.innerHTML += templateEvolution2Info(param1, param2, info1);
-            break;
+    return info1;
+}
 
+async function renderAndLoadEvoDetails(evoDetailArr, htmlElement, englishName) {
+    const locationRequired = evoDetailArr[16][1].name == 'take-damage';
+    const criticalHitsRequired = evoDetailArr[16][1].name == 'three-critical-hits';
+    const towerOfWatersRequired = evoDetailArr[16][1].name == 'tower-of-waters';
+    const towerOfDarknessRequired = evoDetailArr[16][1].name == 'tower-of-darkness';
+    const spinRequired = evoDetailArr[16][1].name == 'spin';
+    const shedRequired = evoDetailArr[16][1].name == 'shed';
+    const tradeRequired = evoDetailArr[16][1].name == 'trade';
+    const triggerItemRequired = evoDetailArr[2][1] && evoDetailArr[16][1].name == 'use-item';
+    const FriendshipRequired = evoDetailArr[8][1] && evoDetailArr[16][1].name == 'level-up';
+    const holdItemRequired = evoDetailArr[16][1].name == 'level-up' && evoDetailArr[1][1] != null;
+    const knownMoveRequired = evoDetailArr[16][1].name == 'level-up' && evoDetailArr[3][1] != null;
+    const PartyMemberRequired = evoDetailArr[16][1].name == 'level-up' && evoDetailArr[11][1] != null;
+    const SimpleLvlUpRequired = evoDetailArr[9][1] && evoDetailArr[16][1].name == 'level-up';
+
+    switch (true) {
+        case locationRequired:
+            renderLocationEvo(htmlElement, englishName);
+            break;
+        case criticalHitsRequired:
+            renderCriticalHitsEvo(htmlElement, englishName);
+            break;
+        case towerOfWatersRequired:
+            renderTowerofWatersEvo(htmlElement);
+            break;
+        case towerOfDarknessRequired:
+            renderTowerofDarknessEvo(htmlElement);
+            break;
+        case spinRequired:
+            renderSpinEvo(htmlElement);
+            break;
+        case shedRequired:
+            renderShedEvo(htmlElement, englishName);
+            break;
+        case tradeRequired:
+            await renderTradeEvo(evoDetailArr, htmlElement, englishName);
+            break;
+        case triggerItemRequired:
+            await renderTriggerItemEvo(evoDetailArr, htmlElement, englishName);
+            break;
+        case FriendshipRequired:
+            renderFriendshipEvo(evoDetailArr, htmlElement, englishName);
+            break;
+        case holdItemRequired:
+            await renderHoldItemEvo(evoDetailArr, htmlElement, englishName);
+            break;
+        case knownMoveRequired:
+            await renderknownMoveEvo(evoDetailArr, htmlElement, englishName);
+            break;
+        case PartyMemberRequired:
+            await renderPartyMemberEvo(evoDetailArr, htmlElement, englishName);
+            break;
+        case SimpleLvlUpRequired:
+            renderSimpleLvlUpEvo(evoDetailArr, htmlElement, englishName);
+            break;
     }
 }
 
