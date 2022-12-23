@@ -1,11 +1,11 @@
 @font-face {
     font-family: Pokemon;
-    src: url("PokemonGb-RAeo.ttf");
+    src: url("../../assets/fonts/PokemonGb-RAeo.ttf");
 }
 
 @font-face {
     font-family: PokemonSolid;
-    src: url("Pokemon\ Solid.ttf");
+    src: url("../../assets/fonts/Pokemon\ Solid.ttf");
 }
 
 body {
@@ -52,9 +52,11 @@ navbar {
     flex-wrap: wrap;
     padding-bottom: 0.2rem;
     padding-top: 0.5rem;
+    gap: .5rem;
 }
 
-navbar div {
+.poke-btn {
+    border: unset;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -66,17 +68,24 @@ navbar div {
     width: 130px;
 }
 
-navbar div:hover {
+.poke-btn:hover {
     cursor: pointer;
     filter: brightness(1.1);
 }
 
-navbar div h4 {
+.poke-btn h4 {
     font-size: 1rem;
     margin: 0 !important;
     line-height: unset !important;
     padding: 4px 0;
     padding-bottom: 10px;
+}
+
+#loadButton {
+    width: 15rem;
+    height: 2.5rem;
+    padding-block: .5rem;
+    margin-bottom: 5rem;
 }
 
 .pokemon-solid-font {
@@ -342,6 +351,8 @@ form {
     margin-top: 2rem;
     margin-bottom: 2rem;
     border-radius: 4rem;
+    max-width: 680px;
+    min-height: 1000px;
 }
 
 #pokeDetailTypes {

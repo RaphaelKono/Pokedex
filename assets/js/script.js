@@ -21,16 +21,18 @@ function filterPokemon() {
     search = search.toLowerCase();
     let list = document.getElementById('list');
     list.innerHTML = '';
-    if (search.length > 1) {
-        for (let i = 0; i < allPokemonNames.length; i++) {
-            let name = allPokemonNames[i];
-            if (name.toLowerCase().includes(search)) {
-                list.innerHTML += `<option value="${name}">`;
-            }
-        }
-    }
+    if (search.length > 1)
+        showOptions(search, list);
 }
 
+function showOptions(search, list) {
+    allPokemonNames.forEach(name => showOptionValue(name, search, list));
+}
+
+function showOptionValue(name, search, list) {
+    if (name.toLowerCase().includes(search))
+        list.innerHTML += `<option value="${name}">`;
+}
 
 function isNumber(n) {
     return !isNaN(parseFloat(n)) && !isNaN(n - 0);
@@ -41,8 +43,7 @@ async function searchPokemon() {
     isLoading = true;
     resetForSearch();
     let search = document.getElementById('search').value;
-    search = capitalizeFirstLetter(search);
-    search = convertToID(search);
+    search = convertToID(capitalizeFirstLetter(search));
     await loadPokemonAPI(search);
     pushIntoArray(search);
     document.getElementById('pokemonList').innerHTML += templatePokemonInfo(search);
@@ -56,9 +57,8 @@ function resetForSearch() {
 }
 
 function convertToID(search) {
-    if (!isNumber(search)) {
+    if (!isNumber(search))
         search = allPokemonNames.indexOf(search) + 1;
-    }
     return search;
 }
 
@@ -80,16 +80,15 @@ function init() {
 
 
 function loadEventListener() {
-    var input1 = document.getElementById('search');
-    input1.addEventListener("keypress", function(event) {
-        // If the user presses the "Enter" key on the keyboard
-        if (event.key === "Enter") {
-            // Cancel the default action, if needed
-            event.preventDefault();
-            // Trigger the button element with a click
-            document.getElementById("searchbtn").click();
-        }
-    });
+    let input1 = document.getElementById('search');
+    input1.addEventListener("keypress", listenToEnterKey);
+}
+
+function listenToEnterKey() {
+    if (event.key === "Enter") {
+        event.preventDefault();
+        document.getElementById("searchbtn").click();
+    }
 }
 
 
@@ -97,16 +96,21 @@ async function renderMorePokemon() {
     document.getElementById('loadButton').classList.add('d-none');
     await renderPokemon();
     window.onscroll = async function(ev) {
-        if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight && isLoading == false) {
-            {
-                isLoading = true;
-                document.getElementById('loadingScreen').classList.remove('d-none');
-                await renderPokemon();
-                document.getElementById('loadingScreen').classList.add('d-none');
-                isLoading = false;
-            }
-        };
-    }
+        if (isScrollEnd())
+            await loadMorePokemon();;
+    };
+}
+
+function isScrollEnd() {
+    return (window.innerHeight + window.scrollY) >= document.body.offsetHeight && !isLoading;
+}
+
+async function loadMorePokemon() {
+    isLoading = true;
+    document.getElementById('loadingScreen').classList.remove('d-none');
+    await renderPokemon();
+    document.getElementById('loadingScreen').classList.add('d-none');
+    isLoading = false;
 }
 
 

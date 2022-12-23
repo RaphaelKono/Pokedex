@@ -7,24 +7,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kono Pokedex</title>
     <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="pokemonTypes.css">
-    <link rel="stylesheet" href="mediaQuery.css">
-    <link rel="apple-touch-icon" sizes="180x180" href="./apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="./favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="./favicon-16x16.png">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/pokemonTypes.css">
+    <link rel="stylesheet" href="assets/css/mediaQuery.css">
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon/favicon-16x16.png">
     <link rel="manifest" href="./site.webmanifest">
-    <script src="script.js"></script>
-    <script src="pokemonDetails.js"></script>
-    <script src="templates.js"></script>
-    <script src="pokemonNames.js"></script>
-    <script src="loadAPIs.js"></script>
+    <script src="node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="assets/js/script.js"></script>
+    <script src="assets/js/pokemonDetails.js"></script>
+    <script src="assets/js/templates.js"></script>
+    <script src="assets/js/pokemonNames.js"></script>
+    <script src="assets/js/loadAPIs.js"></script>
 
 </head>
 
 <body onload="init()" class="dex-bg">
     <header>
-        <a href="index.html"><img src="img/1b138f86caa4d7ec4482849517abcfb6.png" class="header-img"></a>
+        <a href="index.html"><img src="assets/img/1b138f86caa4d7ec4482849517abcfb6.png" class="header-img"></a>
         <form>
             <input list="list" name="Pokemon" id="search" onkeyup="filterPokemon()" placeholder="Name oder ID ..." class="pokemon-font search-input">
             <datalist id="list" onclick="searchPokemon()">
@@ -34,45 +35,45 @@
     </header>
     <div id="pokedexList" class="container">
         <navbar>
-            <div onclick="loadGen(12, 'Erste Generation')" class="pokemon-solid-font">
+            <button onclick="loadGen(12, 'Erste Generation')" class="pokemon-solid-font poke-btn">
                 <h4>Generation 1</h4>
-            </div>
-            <div onclick="loadGen(163, 'Zweite Generation')" class="pokemon-solid-font">
+            </button>
+            <button onclick="loadGen(163, 'Zweite Generation')" class="pokemon-solid-font poke-btn">
                 <h4>Generation 2</h4>
-            </div>
-            <div onclick="loadGen(263, 'Dritte Generation')" class="pokemon-solid-font">
+            </button>
+            <button onclick="loadGen(263, 'Dritte Generation')" class="pokemon-solid-font poke-btn">
                 <h4>Generation 3</h4>
-            </div>
-            <div onclick="loadGen(398, 'Vierte Generation')" class="pokemon-solid-font">
+            </button>
+            <button onclick="loadGen(398, 'Vierte Generation')" class="pokemon-solid-font poke-btn">
                 <h4>Generation 4</h4>
-            </div>
-            <div onclick="loadGen(505, 'Fünfte Generation')" class="pokemon-solid-font">
+            </button>
+            <button onclick="loadGen(505, 'Fünfte Generation')" class="pokemon-solid-font poke-btn">
                 <h4>Generation 5</h4>
-            </div>
-            <div onclick="loadGen(661, 'Sechste Generation')" class="pokemon-solid-font">
+            </button>
+            <button onclick="loadGen(661, 'Sechste Generation')" class="pokemon-solid-font poke-btn">
                 <h4>Generation 6</h4>
-            </div>
-            <div onclick="loadGen(733, 'Siebte Generation')" class="pokemon-solid-font">
+            </button>
+            <button onclick="loadGen(733, 'Siebte Generation')" class="pokemon-solid-font poke-btn">
                 <h4>Generation 7</h4>
-            </div>
-            <div onclick="loadGen(821, 'Achte Generation')" class="pokemon-solid-font">
+            </button>
+            <button onclick="loadGen(821, 'Achte Generation')" class="pokemon-solid-font poke-btn">
                 <h4>Generation 8</h4>
-            </div>
+            </button>
         </navbar>
         <h1 id="whatGeneration" class="pokemon-solid-font">Erste Generation</h1>
 
         <div id="pokemonList">
         </div>
-        <button id="loadButton" onclick="renderMorePokemon()" type="button" class="btn btn-primary">Mehr Pokemon laden</button>
-        <footer id="loadingScreen" class="d-none">
+        <button id="loadButton" onclick="renderMorePokemon()" type="button" class="pokemon-solid-font poke-btn">Mehr Pokemon laden</button>
+        <div id="loadingScreen" class="d-none">
             <div class="loader"></div>
-        </footer>
+        </div>
     </div>
 
     <div id="pokemonDetails" class="container border d-none">
         <div id="pokemonDetailsDiv" class="d-flex justify-content-between w-100 info-header">
             <div class="d-flex flex-column info-top-left">
-                <img src="img/x-mark-3-24.png" class="icon" onclick="closeDetails()">
+                <img src="assets/img/x-mark-3-24.png" class="icon" onclick="closeDetails()">
                 <div class="d-flex flex-column">
                     <div id="pokeNameID" class="card-text topcardinfo"></div>
                     <div>
@@ -84,7 +85,7 @@
             </div>
 
             <div class="d-flex flex-column justify-content-between info-top-right">
-                <img class="icon" src="img/pokemon-noteam.png">
+                <img class="icon" src="assets/img/pokemon-noteam.png">
                 <div id="pokemonID" class="topcardinfo card-text"></div>
                 <div id="pokeGenusID"></div>
                 <div id="nextPokemonn"></div>

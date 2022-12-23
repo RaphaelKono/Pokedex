@@ -16,12 +16,10 @@ async function loadPokemonAPI(x) {
 }
 
 async function loadPokemonSpeciesAPI(i) {
-    if (i == 'urshifu-rapid-strike' || i == 'urshifu-single-strike') {
+    if (i == 'urshifu-rapid-strike' || i == 'urshifu-single-strike')
         i = 892;
-    }
-    if (i == 'darmanitan-standard') {
+    if (i == 'darmanitan-standard')
         i = 555;
-    }
     let speciesURL = `https://pokeapi.co/api/v2/pokemon-species/${i}`
     let speciesResponse = await fetch(speciesURL);
     currentSpecies = await speciesResponse.json();
