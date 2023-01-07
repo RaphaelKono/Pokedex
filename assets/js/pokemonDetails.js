@@ -95,14 +95,14 @@ function adaptTypeCss(x) {
 
 function addArrows(x) {
     if (x > 1) {
-        document.getElementById('priorPokemon').innerHTML = `<img onclick="initDetails(${x-1})" src="img/arrow-91-24.png" class="arrow">`;
+        document.getElementById('priorPokemon').innerHTML = `<img onclick="initDetails(${x-1})" src="assets/img/arrow-91-24.png" class="arrow">`;
     } else if (x <= 1) {
-        document.getElementById('priorPokemon').innerHTML = `<img onclick="initDetails(${898})" src="img/arrow-91-24.png" class="arrow">`;
+        document.getElementById('priorPokemon').innerHTML = `<img onclick="initDetails(${898})" src="assets/img/arrow-91-24.png" class="arrow">`;
     }
     if (x < 898) {
-        document.getElementById('nextPokemonn').innerHTML = `<img onclick="initDetails(${x+1})" src="img/arrow-27-24.png" class="arrow">`;
+        document.getElementById('nextPokemonn').innerHTML = `<img onclick="initDetails(${x+1})" src="assets/img/arrow-27-24.png" class="arrow">`;
     } else if (x >= 898) {
-        document.getElementById('nextPokemonn').innerHTML = `<img onclick="initDetails(${1})" src="img/arrow-27-24.png" class="arrow">`;
+        document.getElementById('nextPokemonn').innerHTML = `<img onclick="initDetails(${1})" src="assets/img/arrow-27-24.png" class="arrow">`;
     }
 }
 

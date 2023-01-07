@@ -110,7 +110,7 @@ async function renderHoldItemEvo(evoDetailArr, htmlElement, englishName) {
 async function renderknownMoveEvo(evoDetailArr, htmlElement, englishName) {
     let moveName = await loadMove(evoDetailArr[3][1].name);
     moveName = nameDecision(moveName);
-    let param1 = '<img src="assets/img/rare-candy.png">'
+    let param1 = '<img src="assets//img/rare-candy.png">'
     let param2 = 'Kennt ' + moveName;
     htmlElement.innerHTML += templateEvolution2Info(param1, param2, englishName);
 }
