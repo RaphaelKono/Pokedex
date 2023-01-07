@@ -33,7 +33,7 @@ function templateEvolution2Info(x, y, info1) {
         <div class="d-flex flex-column align-items-center justify-content-center justForMediaChild">
             ${x}
             <h6>${y}</h6>
-            <img src="img/arrow-18-64.png" class="evoarrow">
+            <img src="assets/img/arrow-18-64.png" class="evoarrow">
         </div>
     </div>
     `
@@ -97,7 +97,7 @@ async function renderTriggerItemEvo(evoDetailArr, htmlElement, englishName) {
 
 function renderFriendshipEvo(evoDetailArr, htmlElement, englishName) {
     let param2 = isDayOrNight(evoDetailArr);
-    let param1 = '<img src="img/rare-candy.png">' + `<div class="d-flex"><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/soothe-bell.png"><h6> > ${evoDetailArr[8][1]}</h6></div>`;
+    let param1 = '<img src="assets/img/rare-candy.png">' + `<div class="d-flex"><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/soothe-bell.png"><h6> > ${evoDetailArr[8][1]}</h6></div>`;
     htmlElement.innerHTML += templateEvolution2Info(param1, param2, englishName);
 }
 
@@ -110,20 +110,20 @@ async function renderHoldItemEvo(evoDetailArr, htmlElement, englishName) {
 async function renderknownMoveEvo(evoDetailArr, htmlElement, englishName) {
     let moveName = await loadMove(evoDetailArr[3][1].name);
     moveName = nameDecision(moveName);
-    let param1 = '<img src="img/rare-candy.png">'
+    let param1 = '<img src="assets/img/rare-candy.png">'
     let param2 = 'Kennt ' + moveName;
     htmlElement.innerHTML += templateEvolution2Info(param1, param2, englishName);
 }
 
 async function renderPartyMemberEvo(evoDetailArr, htmlElement, englishName) {
     let partyMemb = await loadPokemonAPI(evoDetailArr[11][1].name);
-    let param1 = '<img src="img/rare-candy.png">';
+    let param1 = '<img src="assets/img/rare-candy.png">';
     let param2 = `<img src="${partyMemb.sprites.front_default}">`;
     htmlElement.innerHTML += templateEvolution2Info(param1, param2, englishName);
 }
 
 function renderSimpleLvlUpEvo(evoDetailArr, htmlElement, englishName) {
-    let param1 = '<img src="img/rare-candy.png">';
+    let param1 = '<img src="assets/img/rare-candy.png">';
     let param2 = 'Lvl. ' + evoDetailArr[9][1];
     htmlElement.innerHTML += templateEvolution2Info(param1, param2, englishName);
 }
